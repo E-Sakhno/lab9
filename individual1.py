@@ -1,119 +1,136 @@
-# Создать класс Triangle для представления треугольника. 
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# Создать класс Triangle для представления треугольника.
 # Поля данных должны включать
-# углы и стороны. 
-# Требуется реализовать операции: 
+# углы и стороны.
+# Требуется реализовать операции:
 # получения и изменения полей данных,
-# вычисления площади, 
-# вычисления периметра, 
-# вычисления высот, 
-# а также определения вида треугольника 
+# вычисления площади,
+# вычисления периметра,
+# вычисления высот,
+# а также определения вида треугольника
 # (равносторонний, равнобедренный или прямоугольный).
 
+from math import acos, pi
+
+class MyError(Exception):
+    print("Ошибка!")
+
 class Triangle:
-    
-    def __init__(self, FirstSide=0, SecondSide=0, ThirdSide=0, FirstAngle=0, SecondAngle=0, ThirdAngle=0):
-        self.FirstSide = FirstSide
-        self.SecondSide = SecondSide
-        self.ThirdSide = ThirdSide
-        self.FirstAngle = FirstAngle
-        self.SecondAngle = SecondAngle
-        self.ThirdAngle = ThirdAngle
+
+    def __init__(self, a=1, b=1, c=1):
+        self.a = a
+        self.b = b
+        self.c = c
+        if self.a + self.b < self.c or self.a + self.c < self.b or self.b + self.c < self.a:
+            raise MyError("Треугольник с заданнами сторонами не существует")
+
+    def alpha(self):
+        return round(acos((self.a ** 2 + self.c ** 2 - self.b ** 2) / (2 * self.a * self.c)) * 180 / pi, 1)
+
+    def beta(self):
+        return round(acos((self.a ** 2 + self.b ** 2 - self.c ** 2) / (2 * self.a * self.b)) * 180 / pi, 1)
+
+    def gamma(self):
+        return round(acos((self.b ** 2 + self.c ** 2 - self.a ** 2) / (2 * self.c * self.b)) * 180 / pi, 1)
+
 
     def read(self, prompt=None):
         if prompt:
             print(prompt)
-        self.FirstSide = int(input("Введите значение первой стороны: "))
-        self.SecondSide = int(input("Введите значение второй стороны: "))
-        self.ThirdSide = int(input("Введите значение третьей стороны: "))
-        self.FirstAngle = int(input("Введите значение первого угла: "))
-        self.SecondAngle = int(input("Введите значение второго угла "))
-        self.ThirdAngle = int(input("Введите значение третьего угла: "))
-        
+        self.a = int(input("Введите значение первой стороны: "))
+        self.b = int(input("Введите значение второй стороны: "))
+        self.c = int(input("Введите значение третьей стороны: "))
+        if self.a + self.b < self.c or self.a + self.c < self.b or self.b + self.c < self.a:
+            raise MyError("Ошибка - ")
+
+
     def display(self):
-        print(self.FirstSide, self.SecondSide, self.ThirdSide)
-        print(self.FirstAngle, self.SecondAngle, self.ThirdAngle)
-    
-    def get_FirstSide(self):
-        return self.FirstSide
+        print(self.a, self.b, self.c)
+        print(self.alpha(), self.beta(), self.gamma())
 
-    def get_SecondSide(self):
-        return self.SecondSide
-    
-    def get_ThirdSide(self):
-        return self.ThirdSide
+    def get_a(self):
+        return self.a
 
-    def get_FirstAngle(self):
-        return self.FirstAngle
+    def get_b(self):
+        return self.b
 
-    def get_SecondAngle(self):
-        return self.SecondAngle
-    
-    def get_ThirdAngle(self):
-        return self.ThirdAngle
+    def get_c(self):
+        return self.c
 
-    def set_FirstSide(self, fs):
-        self.FirstSide = fs
+    def get_alpha(self):
+        return self.alpha
 
-    def set_SecondSide(self, ss):
-        self.SecondSide = ss
+    def get_beta(self):
+        return self.beta
 
-    def set_ThirdSide(self, ts):
-        self.ThirdSide = ts
+    def get_gamma(self):
+        return self.gamma
 
-    def set_FirstAngle(self, fa):
-        self.FirstAngle = fa
+    def set_a(self, fs):
+        self.a = fs
 
-    def set_SecondAngle(self, sa):
-        self.SecondAngle = sa
+    def set_b(self, ss):
+        self.b = ss
 
-    def set_ThirdAngle(self, ta):
-        self.ThirdAngle = ta
+    def set_c(self, ts):
+        self.c = ts
+
+    def set_alpha(self, fa):
+        self.alpha = fa
+
+    def set_beta(self, sa):
+        self.beta = sa
+
+    def set_gamma(self, ta):
+        self.gamma = ta
 
     def area(self):
-        p = (self.FirstSide + self.SecondSide + self.ThirdSide)/2  # полупериметр треугольника
-        return (p*(p - self.FirstSide)*(p - self.SecondSide)*(p - self.ThirdSide))**(1/2)  # формула Герона
-    
+        # полупериметр треугольника
+        p = (self.a + self.b + self.c) / 2
+        # формула Герона
+        return (p * (p - self.a) * (p - self.b) * (p - self.c)) ** (1 / 2)
+
     def perimetr(self):
-        return self.FirstSide + self.SecondSide + self.ThirdSide
+        return self.a + self.b + self.c
 
     def firstheight(self):
-        p = (self.FirstSide + self.SecondSide + self.ThirdSide)/2  # полупериметр треугольника
-        return round(2*(p*(p - self.FirstSide)*(p - self.SecondSide)*(p - self.ThirdSide))**(1/2)/self.FirstSide, 2)
+        return round(2 * self.area() / self.a, 2)
 
     def secondheight(self):
-        p = (self.FirstSide + self.SecondSide + self.ThirdSide)/2  # полупериметр треугольника
-        return round(2*(p*(p - self.FirstSide)*(p - self.SecondSide)*(p - self.ThirdSide))**(1/2)/self.SecondSide, 2)
+        return round(2 * self.area() / self.b, 2)
 
     def thirdheight(self):
-        p = (self.FirstSide + self.SecondSide + self.ThirdSide)/2  # полупериметр треугольника
-        return round(2*(p*(p - self.FirstSide)*(p - self.SecondSide)*(p - self.ThirdSide))**(1/2)/self.ThirdSide, 2)
+        return round(2 * self.area() / self.c, 2)
 
     def definition(self):
-        if self.FirstAngle == 90 or self.SecondAngle == 90 or self.ThirdAngle == 90:
+        if self.alpha == 90 or self.beta == 90 or self.gamma == 90:
             print("Треугольник прямоугольный")
-        
-        if self.FirstSide == self.SecondSide == self.ThirdSide:
+
+        if self.a == self.b == self.c:
             print("Треугольник равносторонний")
 
-        elif self.FirstSide == self.SecondSide or self.FirstSide == self.ThirdSide or self.SecondSide == self.ThirdSide:
+        elif self.a == self.b or self.a == self.c or self.b == self.c:
             print("Треугольник равнобедренный")
-        
+
 
 if __name__ == "__main__":
-    my_triangle = Triangle(3, 4, 5, 90, 30, 60)
-    print(my_triangle.get_FirstSide())
-    # my_triangle.set_FirstSide(5)
-    print(my_triangle.get_FirstSide())
+    my_triangle = Triangle(1, 4, 5)
+    print(my_triangle.get_a())
+    # my_triangle.set_a(5)
+    print(my_triangle.get_a())
     print("AREA ", my_triangle.area())
     print("PERIMETR ", my_triangle.perimetr())
-    # my_tri = Triangle()
-    # my_tri.read("Введите значения ниже")
-    # my_tri.display()
+    my_tri = Triangle()
+    my_tri.read("Введите значения ниже")
+    my_tri.display()
     print(my_triangle.firstheight())
     my_triangle.definition()
     print("New-triangle")
-    new_triangle = Triangle(6, 6, 6, 60, 60, 60)
+    new_triangle = Triangle(6, 6, 6)
     new_triangle.definition()
     print(new_triangle.firstheight())
     print(new_triangle.secondheight())
     print(new_triangle.thirdheight())
+    new_triangle.display()
