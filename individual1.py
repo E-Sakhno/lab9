@@ -14,8 +14,11 @@
 
 from math import acos, pi
 
+
 class MyError(Exception):
-    print("Ошибка!")
+    def __init__(self, text):
+        self.txt = text
+
 
 class Triangle:
 
@@ -23,8 +26,14 @@ class Triangle:
         self.a = a
         self.b = b
         self.c = c
-        if self.a + self.b < self.c or self.a + self.c < self.b or self.b + self.c < self.a:
-            raise MyError("Треугольник с заданнами сторонами не существует")
+        self.check()
+
+    def check(self):
+        try:
+            if self.a + self.b < self.c or self.a + self.c < self.b or self.b + self.c < self.a:
+                raise MyError("Ошибка - треугольник не существует")
+        except MyError as mr:
+            print(mr)
 
     def alpha(self):
         return round(acos((self.a ** 2 + self.c ** 2 - self.b ** 2) / (2 * self.a * self.c)) * 180 / pi, 1)
@@ -35,20 +44,20 @@ class Triangle:
     def gamma(self):
         return round(acos((self.b ** 2 + self.c ** 2 - self.a ** 2) / (2 * self.c * self.b)) * 180 / pi, 1)
 
-
     def read(self, prompt=None):
         if prompt:
             print(prompt)
         self.a = int(input("Введите значение первой стороны: "))
         self.b = int(input("Введите значение второй стороны: "))
         self.c = int(input("Введите значение третьей стороны: "))
-        if self.a + self.b < self.c or self.a + self.c < self.b or self.b + self.c < self.a:
-            raise MyError("Ошибка - ")
-
+        self.check()
 
     def display(self):
         print(self.a, self.b, self.c)
-        print(self.alpha(), self.beta(), self.gamma())
+        try:
+            print(self.alpha(), self.beta(), self.gamma())
+        except ValueError:
+            print("Ошибка - вычисление невозможно")
 
     def get_a(self):
         return self.a
@@ -116,19 +125,21 @@ class Triangle:
 
 
 if __name__ == "__main__":
-    my_triangle = Triangle(1, 4, 5)
+    my_triangle = Triangle(3, 4, 5)
     print(my_triangle.get_a())
     # my_triangle.set_a(5)
     print(my_triangle.get_a())
     print("AREA ", my_triangle.area())
     print("PERIMETR ", my_triangle.perimetr())
+    print()
     my_tri = Triangle()
     my_tri.read("Введите значения ниже")
     my_tri.display()
+    print()
     print(my_triangle.firstheight())
     my_triangle.definition()
     print("New-triangle")
-    new_triangle = Triangle(6, 6, 6)
+    new_triangle = Triangle(6, 5, 4)
     new_triangle.definition()
     print(new_triangle.firstheight())
     print(new_triangle.secondheight())
