@@ -29,11 +29,8 @@ class Triangle:
         self.check()
 
     def check(self):
-        try:
-            if self.a + self.b < self.c or self.a + self.c < self.b or self.b + self.c < self.a:
-                raise MyError("Ошибка - треугольник не существует")
-        except MyError as mr:
-            print(mr)
+        if self.a + self.b < self.c or self.a + self.c < self.b or self.b + self.c < self.a:
+            raise MyError("Ошибка - треугольник не существует")
 
     def alpha(self):
         return round(acos((self.a ** 2 + self.c ** 2 - self.b ** 2) / (2 * self.a * self.c)) * 180 / pi, 1)
